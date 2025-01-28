@@ -155,10 +155,10 @@ void config_query::copy(const config_query &cfg)
 
 void config_query::reset()
 {
-	sortpattern = "%date%|%artist%|%album%|%tracknumber%";
-	step1 = "%genre%";
-	step2 = "%artist%";
-	step3 = "%album%";
+	sortpattern = "%DATE%|%ALBUM ARTIST%|%ALBUM%|%TRACKNUMBER%";
+	step1 = "$meta_sep(GENRE,';')";
+	step2 = "$if2($meta_sep(ALBUM ARTIST,';'),$meta_sep(ARTIST,';'))";
+	step3 = "%ALBUM%";
 	sendtodedicated = true;
 }
 
