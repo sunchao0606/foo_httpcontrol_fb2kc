@@ -449,10 +449,13 @@ example: ?cmd=PlayingCommand&amp;param1=Playback%20Statistics%2FRating%2F3</li>
 
 <h2>Appendix #2</h2>
 
-<p>Command syntax:
+    <p><b>Command syntax</b>:
     http://&gt;ip&lt;[:&lt;port&gt;]/&lt;?cmd=Command[&amp;param1=param 1[&amp;param2=param 2]][&amp;param3=param 3]&gt;</p>
+    <p>Adding param3=NoResponse to any request suppresses any result output.</p>
+    <p>Adding param3=templatefile uses specified file templatefile as a template to generate output.</p>
+    <p>All indexes and numbering are start from 0.</p>
 
-<p>Supported commands:</p>
+<p><b>Supported commands</b>:</p>
 <ul id="commands">
 <li>Stop playback<br/>
         cmd=Stop<br/></li>
@@ -587,38 +590,44 @@ example: ?cmd=PlayingCommand&amp;param1=Playback%20Statistics%2FRating%2F3</li>
 <li>Use different template file<br/>
         param3=template.html</li>
         
-<li>PlaylistItemsPerPage<br/>
+<li>Set number of playlist items per page.<br/>
+        cmd=PlaylistItemsPerPage<br/>
         param1=number of playlist items per page, limited to 16384</li>
         
-<li>QueueAlbum<br/>
+<li>Queue album.<br/>
+        cmd=QueueAlbum<br/>
         param1=item album search starts from (focused item is used if param1 is omitted)</li>
 
-<li>QueueRandomItems<br/>
+<li>Queue random items in active playlist.<br/>
         param1=item count</li>
 
-<li>
-    Retrieve queue list as JSON.<br />
-    {pi: track index, qi: queue index, pl: playlist index, t: title. a: artist, al: album, l: length (h:mm:ss), r: rating}<br />
-    cmd=Queue
-</li>
+<li>Retrieve queue list as JSON.<br/>
+        cmd=GetQueue<br/>
+        {pi: track index, qi: queue index, pl: playlist index, t: title. a: artist, al: album, l: length (h:mm:ss), r: rating}</li>
 
-<li>FlushQueue</li>
+<li>Flush queue completely.<br/>
+        cmd=FlushQueue<br/></li>
         
-<li>Parse<br/>
+<li>Parse specified string.<br/>
+        cmd=Parse<br/>
         param1=string to parse and return</li>
 
-<li>RemovePlaylist<br/>
+<li>Removes specified playlist.<br/>
+        cmd=RemovePlaylist<br/>
         param1=playlist index</li>
 
-<li>CreatePlaylist<br/>
+<li>Creates playlist.<br/>
+        cmd=CreatePlaylist<br/>
         param1=playlist name<br/>
         param2=insertion point index</li>
 
-<li>RenamePlaylist<br/>
+<li>Renames playlist.<br/>
+        cmd=RenamePlaylist<br/>
         param1=playlist name<br/>
         param2=playlist index</li>
 
-<li>FocusOnPlaying</li>
+<li>Set focus to playing item.<br/>
+        cmd=FocusOnPlaying<br/></li>
 
 <li>Update helper macros<br/>
         cmd=RefreshPlayingInfo</li>
