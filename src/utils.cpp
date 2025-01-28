@@ -325,7 +325,7 @@ int compare_natural_utf8(const char *p1, const char *p2)
 	return result;
 }
 
-t_size query_select_or_create_playlist(bool dedicated = true, const char *playlist_name = "Query")
+t_size query_select_or_create_playlist(bool dedicated = true, const char *playlist_name = "Query (http)")
 {
 	const auto plm = playlist_manager::get();
 	const auto apm = autoplaylist_manager::get();
