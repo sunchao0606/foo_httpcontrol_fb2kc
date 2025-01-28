@@ -33,17 +33,24 @@ namespace control
 						foo_error(pfc::string8() << "skipping \"" << item_path << "\": unrecognized extension or not allowed protocol");
 				}
 
-				plm->activeplaylist_add_items(p_items_toadd, bit_array_true());
+				if (!plm->activeplaylist_add_items(p_items_toadd, bit_array_true()))
+					activeplaylist_add_items_fail_msg();
 			}
 			else
 			{
-				plm->activeplaylist_add_items(p_items, bit_array_true());
+				if (!plm->activeplaylist_add_items(p_items, bit_array_true()))
+					activeplaylist_add_items_fail_msg();
 			}
 
 			on_aborted();
 		};
 
 		void on_aborted() { httpc::enqueueing = false; };
+
+		void activeplaylist_add_items_fail_msg()
+		{
+			foo_error("activeplaylist_add_items failed: active playlist must exist and be writeable");
+		}
 	};
 
 	bool cmd_stop(foo_httpserver_command *cmd)
@@ -819,12 +826,15 @@ namespace control
 	bool cmd_browse(foo_httpserver_command *cmd)
 	{
 		if (httpc::enqueueing)
+		{
+			foo_error("Enqueueing in progress");
 			return false;
+		}
 
 		pfc::string8 param1 = cmd->get_param(cmd->E_PARAM1);
 		pfc::string8 param2 = cmd->get_param(cmd->E_PARAM2);
 
-		pfc::list_t<const char *> files;	// files/dirs to be enqueued
+		pfc::string_list_impl files;        // files/dirs to be enqueued
 
 		bool is_dir = false;
 		bool is_file = false;
@@ -885,8 +895,8 @@ namespace control
 				t_size l = browser.entries.get_count();
 				for(unsigned int i = 0; i < l; ++i)
 					if (browser.entries[i].type != foo_browsefiles::ET_DIR)
-							files.add_item(browser.entries[i].path);
-				}
+						files.add_item(browser.entries[i].path);
+			}
 		}
 
 		if (files.get_count())	// if there is anything to enqueue
