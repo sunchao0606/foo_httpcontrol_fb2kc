@@ -2,6 +2,10 @@
 #include "httpserver.h"
 #include "facets.h"
 #include "browsefiles.h"
+extern "C" {
+#include <Powrprof.h>
+}
+#pragma comment(lib, "Powrprof.lib")
 
 namespace httpc
 {
@@ -1199,6 +1203,85 @@ namespace control
 		return true;
 	}
 
+	bool power_action(pfc::stringLite action)
+	{
+		HANDLE hToken;
+		TOKEN_PRIVILEGES tkp;
+
+		if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
+			return false;
+
+		LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid);
+		tkp.PrivilegeCount = 1;
+		tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+
+		AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
+
+		if (GetLastError() != ERROR_SUCCESS)
+			return false;
+
+		if (action == "SUSPEND" || action == "HIBERNATE")
+		{
+			if (!SetSuspendState(action == "HIBERNATE", TRUE, FALSE))
+			{
+				if (!SetSystemPowerState(action == "SUSPEND", TRUE))
+					return false;
+			}
+		}
+		else
+		{
+			UINT flags = EWX_FORCEIFHUNG;
+
+			if (action == "POWEROFF")
+				flags |= EWX_POWEROFF;
+			else if (action == "SHUTDOWN")
+				flags |= EWX_SHUTDOWN;
+			else if (action == "REBOOT")
+				flags |= EWX_REBOOT;
+
+			if (!ExitWindowsEx(flags, 0))
+				return false;
+		}
+		tkp.Privileges[0].Attributes = 0;
+		AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
+		return true;
+	}
+
+	bool cmd_shutdown(foo_httpserver_command* cmd)
+	{
+		SYSTEM_POWER_CAPABILITIES spc = { 0 };
+		GetPwrCapabilities(&spc);
+		if (spc.SystemS5)
+			return power_action("POWEROFF");
+		else
+			return power_action("SHUTDOWN");
+	}
+
+	bool cmd_reboot(foo_httpserver_command* cmd)
+	{
+		return power_action("REBOOT");
+	}
+
+	bool cmd_suspend(foo_httpserver_command* cmd)
+	{
+		SYSTEM_POWER_CAPABILITIES spc = { 0 };
+		GetPwrCapabilities(&spc);
+		if (spc.SystemS1 || spc.SystemS2 || spc.SystemS3)
+			return power_action("SUSPEND");
+		else
+			return false;
+	}
+
+	bool cmd_hibernate(foo_httpserver_command* cmd)
+	{
+		SYSTEM_POWER_CAPABILITIES spc = { 0 };
+		GetPwrCapabilities(&spc);
+		if (spc.SystemS4)
+			return power_action("HIBERNATE");
+		else
+			return false;
+	}
+
 	void gen_cmd_table()
 	{
 		commands["P"] = &cmd_switchplaylistpage;
@@ -1255,6 +1338,10 @@ namespace control
 		commands["Version"] = &cmd_version;
 		commands["FoobarVersion"] = &cmd_foobarversion;
 		commands["GetQueue"] = &cmd_getqueue;
+		commands["Shutdown"] = &cmd_shutdown;
+		commands["Reboot"] = &cmd_reboot;
+		commands["Suspend"] = &cmd_suspend;
+		commands["Hibernate"] = &cmd_hibernate;
 		commands["SeekSecondDelta"] = &cmd_seekdelta;	// deprecated
 		commands["Sort"] = &cmd_sort_ascending;			// deprecated
 		commands["Seek"] = &cmd_seekpercent;			// deprecated
