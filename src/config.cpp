@@ -51,7 +51,7 @@ void config_main::reset()
 	gzip_enable = false;
 	extra_formats = "zip|rar";
 	ignored_formats = "";
-	allowed_protocols = "http|https";
+	allowed_protocols = "http|https|3dydfy|fy+https|fy+http";
 }
 
 void config_main::get_data_raw(stream_writer * p_stream,abort_callback & p_abort)
