@@ -247,7 +247,10 @@ public:
 	const char* get_name() { return "HTTP Control"; }
 	GUID get_guid() { return guid_preferences_page1; }
 	GUID get_parent_guid() { return preferences_page::guid_tools; }
-	bool get_help_url(pfc::string_base& p_out) { p_out = VER_SUPPORT_FORUM; return true; }
+	bool get_help_url(pfc::string_base& p_out) { 
+		p_out = pfc::string8(core_api::get_profile_path()) << VER_SUPPORT_DOCS;
+		return true; 
+	}
 };
 
 static preferences_page_factory_t<preferences_page_main_impl> g_preferences_page1_impl_factory;
@@ -340,7 +343,10 @@ public:
 	const char* get_name() { return "Media Library"; }
 	GUID get_guid() { return guid_preferences_page2; }
 	GUID get_parent_guid() { return guid_preferences_page1; }
-	bool get_help_url(pfc::string_base& p_out) { p_out = VER_SUPPORT_FORUM; return true; }
+	bool get_help_url(pfc::string_base& p_out) { 
+		p_out = pfc::string8(core_api::get_profile_path()) << VER_SUPPORT_DOCS;
+		return true; 
+	}
 };
 
 static preferences_page_factory_t<preferences_page_query_impl> g_preferences_page1_query_factory;
