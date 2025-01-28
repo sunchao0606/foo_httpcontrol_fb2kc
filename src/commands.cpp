@@ -1131,6 +1131,65 @@ namespace control
 		return true;
 	}
 
+	bool cmd_version(foo_httpserver_command* cmd)
+	{
+		pfc::string8 param1 = cmd->get_param(0);
+		//Foobar controller requires specific version to work properly
+		command_result = "{\"versionName\":\"";
+		command_result << (param1.get_length() == 0 ? VER_CONTROLLER : VER_PRODUCT_VERSION_STR);
+		command_result << "\", \"versionCode\":\"1\"}";
+		return true;
+	}
+
+	bool cmd_foobarversion(foo_httpserver_command* cmd)
+	{
+		pfc::string8 param1 = cmd->get_param(0);
+		static_api_ptr_t<core_version_info_v2> version;
+		command_result = (param1.get_length() == 0 ? "foobar2000 v" : "");
+		command_result << version->get_version_as_text();
+		return true;
+	}
+
+	bool cmd_getqueue(foo_httpserver_command* cmd)
+	{
+		static_api_ptr_t<playlist_manager> plm;
+
+		pfc::list_t<t_playback_queue_item> queue;
+		plm->queue_get_contents(queue);
+
+		service_ptr_t<titleformat_object> track_script;
+		static_api_ptr_t<titleformat_compiler>()->compile_safe(track_script, "$if2(%TITLE%,?)|*|$if2(%ARTIST%,?)|*|$if2(%ALBUM%,?)|*|$if2(%LENGTH%,0:00)|*|$max(%RATING%,0)");
+		pfc::string8 track_info;
+		pfc::list_t<pfc::string8> track_info_list;
+
+		command_result = "[";
+		t_size l = queue.get_count();
+		for (t_size k = 0; k < l; ++k)
+		{
+			queue[k].m_handle->format_title(NULL, track_info, track_script, NULL);
+			pfc::splitStringSimple_toList(track_info_list, "|*|", track_info);
+			command_result << "{";
+			command_result << "\"pi\":\"" << queue[k].m_item << "\", ";
+			command_result << "\"pl\":\"" << queue[k].m_playlist << "\", ";
+			command_result << "\"qi\":\"" << k << "\", ";
+			command_result << "\"t\":\"" << track_info_list[0] << "\", ";
+			command_result << "\"a\":\"" << track_info_list[1] << "\", ";
+			command_result << "\"al\":\"" << track_info_list[2] << "\", ";
+			command_result << "\"l\":\"" << track_info_list[3] << "\", ";
+			command_result << "\"r\":\"" << track_info_list[4] << "\" ";
+			command_result << "}";
+			if (k < l - 1)
+			{
+				command_result << ", ";
+				track_info.reset();
+				track_info_list.remove_all();
+			}
+		}
+		command_result << "]";
+		return true;
+	}
+
+
 	void gen_cmd_table()
 	{
 		commands["P"] = &cmd_switchplaylistpage;
@@ -1184,6 +1243,9 @@ namespace control
 		commands["SortAscending"] = &cmd_sort_ascending;
 		commands["SortDescending"] = &cmd_sort_descending;
 		commands["FormatTitles"] = &cmd_formattitles;
+		commands["Version"] = &cmd_version;
+		commands["FoobarVersion"] = &cmd_foobarversion;
+		commands["GetQueue"] = &cmd_getqueue;
 		commands["SeekSecondDelta"] = &cmd_seekdelta;	// deprecated
 		commands["Sort"] = &cmd_sort_ascending;			// deprecated
 		commands["Seek"] = &cmd_seekpercent;			// deprecated
