@@ -1133,7 +1133,7 @@ namespace control
 
 	bool cmd_version(foo_httpserver_command* cmd)
 	{
-		pfc::string8 param1 = cmd->get_param(0);
+		auto param1 = cmd->get_param(0);
 		//Foobar controller requires specific version to work properly
 		command_result = "{\"versionName\":\"";
 		command_result << (param1.get_length() == 0 ? VER_CONTROLLER : VER_PRODUCT_VERSION_STR);
@@ -1143,7 +1143,7 @@ namespace control
 
 	bool cmd_foobarversion(foo_httpserver_command* cmd)
 	{
-		pfc::string8 param1 = cmd->get_param(0);
+		auto param1 = cmd->get_param(0);
 		static_api_ptr_t<core_version_info_v2> version;
 		command_result = (param1.get_length() == 0 ? "foobar2000 v" : "");
 		command_result << version->get_version_as_text();
@@ -1163,8 +1163,8 @@ namespace control
 		pfc::list_t<pfc::string8> track_info_list;
 
 		command_result = "[";
-		t_size l = queue.get_count();
-		for (t_size k = 0; k < l; ++k)
+		auto l = queue.get_count();
+		for (auto k = 0; k < l; ++k)
 		{
 			queue[k].m_handle->format_title(NULL, track_info, track_script, NULL);
 			pfc::splitStringSimple_toList(track_info_list, "|*|", track_info);
@@ -1188,7 +1188,6 @@ namespace control
 		command_result << "]";
 		return true;
 	}
-
 
 	void gen_cmd_table()
 	{
