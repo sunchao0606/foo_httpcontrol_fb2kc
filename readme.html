@@ -28,7 +28,7 @@
 </style>	
 </head>
 <body>
-<h2>foo_httpcontrol 0.97.28 21 May 2023</h2>
+<h2>foo_httpcontrol 0.97.29 21 April 2024</h2>
 <p><a href="https://bitbucket.org/oblikoamorale/foo_httpcontrol/wiki/Home">https://bitbucket.org/oblikoamorale/foo_httpcontrol/wiki/Home</a></p>
 
 <p>Licensed under <a href="https://opensource.org/licenses/BSD-3-Clause">New BSD License</a>.</p>
@@ -95,6 +95,15 @@ Don't forget to press Apply or your changes won't have any effect until fb2k is 
 
 <p>Discussion thread (please post all your questions and  suggestions  here):
 <a href="http://www.hydrogenaudio.org/forums/index.php?showtopic=62218">http://www.hydrogenaudio.org/forums/index.php?showtopic=62218</a></p>
+
+<h2>Changes history 2024</h2>
+
+<p>v0.97.29 21 Apr</p>
+<ul>
+<li>add: GetQueue command; compatible with <a href="https://play.google.com/store/apps/details?id=com.cav.foobar2000controller">foobar2000 controller</a> app;</li>
+<li>add: Version command to retrieve foo_httpcontrol version; compatible with foobar2000 controller app;</li>
+<li>add: FoobarVersion command; compatible with foobar2000 controller app;</li>
+</ul>
 
 <h2>Changes history 2023</h2>
 
@@ -587,6 +596,12 @@ example: ?cmd=PlayingCommand&amp;param1=Playback%20Statistics%2FRating%2F3</li>
 <li>QueueRandomItems<br/>
         param1=item count</li>
 
+<li>
+    Retrieve queue list as JSON.<br />
+    {pi: track index, qi: queue index, pl: playlist index, t: title. a: artist, al: album, l: length (h:mm:ss), r: rating}<br />
+    cmd=Queue
+</li>
+
 <li>FlushQueue</li>
         
 <li>Parse<br/>
@@ -645,6 +660,17 @@ example: ?cmd=PlayingCommand&amp;param1=Playback%20Statistics%2FRating%2F3</li>
 	param2=active playlist item index (optional)<br/>
 	param3=file name to guess the resulting content type from, use file.json<br/>
 </li>
+
+<li>
+    Retrieves Foobar2000 version as ""Foobar2000 v"" + version string<br />
+    cmd=FoobarVersion<br />
+    param1=if not empty, returns only the version string without "Foobar2000 v"<br />
+</li>
+
+<li>
+    Retrieves foo_httpcontrol's version. For compatibility with <a href="https://play.google.com/store/apps/details?id=com.cav.foobar2000controller">foobar2000 controller</a>, the version is spoofed by default.<br />
+    cmd=Version<br />
+    param1=if not empty, returns the real version of the component.
 
 </ul>
         
