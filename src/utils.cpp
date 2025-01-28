@@ -2,6 +2,8 @@
 #include <jnetlib/webserver.h>
 #include <foobar2000/helpers/filetimetools.h>
 #include "utils.h"
+#include "facets_autoplaylist_client.h"
+#include "helpers_xxx.h"
 
 void foo_info(const char *msg)
 {
@@ -332,14 +334,32 @@ t_size query_select_or_create_playlist(bool dedicated = true, const char *playli
 	t_size playlist;
 
 	if (dedicated)
-		playlist = plm->find_or_create_playlist(playlist_name);
+	{
+		// There may be multiple playlist with same name and SDK method just returns the first one
+		pfc::list_t<t_size> playlists = find_playlists(playlist_name);
+		t_size idx, n, m = playlists.get_count();
+		pfc::string component;
+		bool found = false;
+		for (n = 0; n < m; n++) {
+			idx = playlists.get_item(n);
+			plm->playlist_lock_query_name(idx, component);
+			if (component == "Autoplaylist" && apm->is_client_present(idx))
+			{
+				apm->remove_client(idx);
+				if (!apm->is_client_present(idx))
+				{
+					playlist = idx; 
+					found = true;  
+					break;
+				}
+			}
+		}
+		if (found == false) playlist = plm->find_or_create_playlist_unlocked(playlist_name);
+	}
 	else
 		playlist = plm->get_active_playlist();
 
 	plm->set_active_playlist(playlist);
-
-	if (apm->is_client_present(playlist))
-		apm->remove_client(playlist);
 
 	return playlist;
 }
