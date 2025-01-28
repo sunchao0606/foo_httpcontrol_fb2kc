@@ -60,7 +60,7 @@ BEGIN
     EDITTEXT        IDC_AUTOPLAYLIST_SORT_PATTERN,89,99,198,13,ES_AUTOHSCROLL
     RTEXT           "Results sort pattern",IDC_STATIC,7,101,73,13
     CONTROL         "Send results to separate playlist",IDC_AUTOPLAYLIST_SENDTODEDICATED,
-                    "Button",BS_AUTOCHECKBOX | BS_LEFTTEXT | BS_CENTER | BS_NOTIFY | WS_TABSTOP,8,126,118,12,WS_EX_RIGHT
+                    "Button",BS_AUTOCHECKBOX | BS_LEFTTEXT | BS_CENTER | BS_NOTIFY | WS_TABSTOP,14,126,118,12,WS_EX_RIGHT
     EDITTEXT        IDC_AUTOPLAYLIST_QUERY_STEP1,89,28,198,13,ES_AUTOHSCROLL
     RTEXT           "Step 1",IDC_STATIC,31,30,49,13
     EDITTEXT        IDC_AUTOPLAYLIST_QUERY_STEP2,89,47,198,13,ES_AUTOHSCROLL
@@ -68,8 +68,9 @@ BEGIN
     EDITTEXT        IDC_AUTOPLAYLIST_QUERY_STEP3,89,66,198,13,ES_AUTOHSCROLL
     RTEXT           "Step 3",IDC_STATIC,31,68,49,13
     GROUPBOX        "Query steps",IDC_STATIC,16,14,285,75
+    LTEXT           "Destination playlist name may be set by directly renaming the playlist on the UI (changes will be saved between sessions). By default is named ""Query (htttp)"".",IDC_STATIC,17,177,270,19
     LTEXT           "You have to fill at least first query step to get query filter working.",IDC_STATIC,17,205,270,19
-    LTEXT           "$meta_sep(genre,';')-like syntax of query step is required to support multiple metadata field values. Only one field per step can be properly expanded.",IDC_STATIC,17,224,270,19
+    LTEXT           """$meta_sep(GENRE,';')"" syntax of query step is required to support multiple metadata field values. Only one field per step can be properly expanded.",IDC_STATIC,17,224,270,19
 END
 
 
