@@ -1,0 +1,22 @@
+[
+	{
+		"option": "theme",
+		"name": "Light mode or dark mode: light, dark",
+		"value": "dark"
+	},
+	{
+		"option": "dynamicColor",
+		"name": "Change UI colors based on album art.",
+		"value": true
+	},
+	{
+		"option": "dynamicAlbumArt",
+		"name": "Transform albumart into a disc animation.",
+		"value": true
+	},
+	{
+		"option": "preferDiscArt",
+		"name": "Prefer discart to albumart (see config file).",
+		"value": false
+	}
+]

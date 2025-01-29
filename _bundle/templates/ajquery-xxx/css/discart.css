@@ -1,0 +1,24 @@
+.paused {
+	animation-play-state: paused;
+}
+
+.play {
+	animation: spin 3s linear infinite;
+}
+
+.clip {
+	clip-path: circle(40% at 50% 50%);
+	mask: radial-gradient(circle 40px, #0000 98%, #fff);
+	-webkit-clip-path: circle(40% at 50% 50%);
+	-webkit-mask: radial-gradient(circle 40px, #0000 98%, #fff);
+}
+
+@keyframes spin {
+	from {
+		transform: translate(-50%, -50%) rotate(0deg);
+	}
+
+	to {
+		transform: translate(-50%, -50%) rotate(360deg);
+	}
+}
