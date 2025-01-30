@@ -46,7 +46,7 @@ BEGIN
     CTEXT           ":",IDC_STATIC,181,11,8,12
     GROUPBOX        "File browser",IDC_STATIC,15,126,286,70
     RTEXT           "Extra formats",IDC_STATIC,29,160,57,15
-    LTEXT           """Allowed paths"", ""Extra formats"", ""Allowed protocols"" and ""Hide formats"" fields accept several values separated by |.",IDC_STATIC,23,262,275,20
+    LTEXT           """Allowed paths"", ""Extra formats"", ""Allowed protocols"" and ""Ignored formats"" fields accept several values separated by |.",IDC_STATIC,23,262,275,20
     EDITTEXT        IDC_IGNORED_FORMATS,235,159,58,13,ES_AUTOHSCROLL
     RTEXT           "Ignored formats",IDC_STATIC,169,161,62,15
     RTEXT           "Allowed protocols",IDC_STATIC,17,179,69,15
