@@ -3,7 +3,7 @@
 
 #define VERSION_MAJOR               0
 #define VERSION_MINOR               97
-#define VERSION_REVISION            30
+#define VERSION_REVISION            31
 #define VERSION_BUILD               0
 #define VERSION_ID_STR				"fb2kc"
 
@@ -15,7 +15,7 @@
 #define VER_ORIGINAL_FILENAME_STR   VER_PRODUCTNAME_STR ".dll"
 #define VER_COPYRIGHT_STR           "(C) oblikoamorale, (C) regorxxx"
 #define VER_SUPPORT_FORUM			"https://hydrogenaud.io/index.php/topic,62218.0.html"
-#define VER_SUPPORT_DOCS			"\\user-components\\foo_httpcontrol\\readme.html"
+#define VER_SUPPORT_DOCS			"readme.html"
 #define VER_CONTROLLER				"0.97.14-fb2kc"
 
 #ifdef _DEBUG

@@ -248,7 +248,8 @@ public:
 	GUID get_guid() { return guid_preferences_page1; }
 	GUID get_parent_guid() { return preferences_page::guid_tools; }
 	bool get_help_url(pfc::string_base& p_out) { 
-		p_out = pfc::string8(core_api::get_profile_path()) << VER_SUPPORT_DOCS;
+		p_out = pfc::string8() << "file://" << core_api::get_my_full_path();
+		p_out.replace_string(pfc::string8() << core_api::get_my_file_name() << ".dll", VER_SUPPORT_DOCS);
 		return true; 
 	}
 };
@@ -344,7 +345,8 @@ public:
 	GUID get_guid() { return guid_preferences_page2; }
 	GUID get_parent_guid() { return guid_preferences_page1; }
 	bool get_help_url(pfc::string_base& p_out) { 
-		p_out = pfc::string8(core_api::get_profile_path()) << VER_SUPPORT_DOCS;
+		p_out = pfc::string8() << "file://" << core_api::get_my_full_path();
+		p_out.replace_string(pfc::string8() << core_api::get_my_file_name() << ".dll", VER_SUPPORT_DOCS);
 		return true; 
 	}
 };
