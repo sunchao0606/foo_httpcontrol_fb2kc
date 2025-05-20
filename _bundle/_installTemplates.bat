@@ -18,10 +18,11 @@ ECHO (1) default
 ECHO (2) ajquery
 ECHO (3) ajquery-xxx
 ECHO (4) foobar2000controller
-ECHO (5) ALL
+ECHO (5) foobarCon
+ECHO (6) ALL
 ECHO.
 IF [%~1]==[] (
-	CHOICE /C 12345 /N /M "CHOOSE TEMPLATE TO INSTALL (1-5): "
+	CHOICE /C 123456 /N /M "CHOOSE TEMPLATE TO INSTALL (1-6): "
 ) ELSE (
 	IF [%1] EQU [0] (
 		ECHO 9| CHOICE /C 123456789 /N >NUL
@@ -33,8 +34,9 @@ IF %ERRORLEVEL% EQU 1 GOTO default
 IF %ERRORLEVEL% EQU 2 GOTO ajquery
 IF %ERRORLEVEL% EQU 3 GOTO ajquery-xxx
 IF %ERRORLEVEL% EQU 4 GOTO foobar2000controller
-IF %ERRORLEVEL% EQU 5 GOTO all
-IF ERRORLEVEL 6 (
+IF %ERRORLEVEL% EQU 5 GOTO foobarcon
+IF %ERRORLEVEL% EQU 6 GOTO all
+IF ERRORLEVEL 7 (
 	ECHO Option ^(%1^) not recognized.
 	GOTO:EOF
 )
@@ -73,6 +75,17 @@ ECHO See this component readme for more info.  (browser window should open with 
 ECHO.
 START "" readme.html
 CALL :copy_folder foobar2000controller
+CALL :finish
+GOTO:EOF
+
+:foobarcon
+ECHO.
+ECHO foobarCon template has integration with foobarCon android app.
+ECHO The app must be installed on an android device to use it. 
+ECHO See this component readme for more info.  (browser window should open with it)
+ECHO.
+START "" readme.html
+CALL :copy_folder foobarCon
 CALL :finish
 GOTO:EOF
 
