@@ -3,7 +3,7 @@
 
 #define VERSION_MAJOR               0
 #define VERSION_MINOR               97
-#define VERSION_REVISION            31
+#define VERSION_REVISION            32
 #define VERSION_BUILD               0
 #define VERSION_ID_STR				"fb2kc"
 
