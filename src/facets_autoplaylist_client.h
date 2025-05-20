@@ -7,7 +7,7 @@ namespace httpc
 {
 namespace facets
 {
-class foo_autoplaylist_client : public autoplaylist_client {
+class foo_autoplaylist_client : public autoplaylist_client_v2 {
 public:
 	foo_autoplaylist_client() {}
 
@@ -20,7 +20,13 @@ public:
 	//! Retrieves your configuration data to be used later when re-instantiating your autoplaylist_client after a restart.
 	void get_configuration(stream_writer* p_stream, abort_callback& p_abort) { }
 
-	void show_ui(t_size p_source_playlist) { }
+	void show_ui(t_size p_source_playlist) { };
+
+	void set_full_refresh_notify(completion_notify::ptr notify);
+
+	bool show_ui_available();
+
+	void get_display_name(pfc::string_base& out);
 };
 
 }

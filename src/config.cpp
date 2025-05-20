@@ -127,7 +127,7 @@ void config_misc::reset()
 {
 	stop_after_queue = false;
 	last_browse_dir = "";
-	query_playlist_name = "Query (http)";
+	query_playlist_name = HTTPC_QUERY_PLAYLIST_NAME;
 }
 
 void config_misc::get_data_raw(stream_writer * p_stream,abort_callback & p_abort)

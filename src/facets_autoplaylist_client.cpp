@@ -65,5 +65,16 @@ namespace facets
 		// todo! hack, I suppose
 		return false;
 	};
+
+	void foo_autoplaylist_client::set_full_refresh_notify(completion_notify::ptr notify) { };
+
+	bool foo_autoplaylist_client::show_ui_available() {
+		return false;
+	};
+
+	void foo_autoplaylist_client::get_display_name(pfc::string_base& out) {
+		out = HTTPC_QUERY_AUTOPLAYLIST_CLIENT_NAME;
+	}
+
 }
 }

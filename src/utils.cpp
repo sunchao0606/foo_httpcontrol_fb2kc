@@ -2,8 +2,6 @@
 #include <jnetlib/webserver.h>
 #include <foobar2000/helpers/filetimetools.h>
 #include "utils.h"
-#include "facets_autoplaylist_client.h"
-#include "helpers_xxx.h"
 
 void foo_info(const char *msg)
 {
@@ -327,7 +325,7 @@ int compare_natural_utf8(const char *p1, const char *p2)
 	return result;
 }
 
-t_size query_select_or_create_playlist(bool dedicated = true, const char *playlist_name = "Query (http)")
+t_size query_select_or_create_playlist(bool dedicated = true, const char *playlist_name = HTTPC_QUERY_PLAYLIST_NAME)
 {
 	const auto plm = playlist_manager::get();
 	const auto apm = autoplaylist_manager::get();
@@ -335,31 +333,53 @@ t_size query_select_or_create_playlist(bool dedicated = true, const char *playli
 
 	if (dedicated)
 	{
-		// There may be multiple playlist with same name and SDK method just returns the first one
-		pfc::list_t<t_size> playlists = find_playlists(playlist_name);
-		t_size idx, n, m = playlists.get_count();
-		pfc::string component;
-		bool found = false;
-		for (n = 0; n < m; n++) {
-			idx = playlists.get_item(n);
-			plm->playlist_lock_query_name(idx, component);
-			if (component == "Autoplaylist" && apm->is_client_present(idx))
+		pfc::string idx_playlist_client, idx_playlist_name;
+		auto found = false;
+		auto playlists_count = plm->get_playlist_count();
+
+		for (auto idx = 0; idx < playlists_count; ++idx) {
+			plm->playlist_get_name(idx, idx_playlist_name);
+
+			// Verifying playlist name
+			if (idx_playlist_name != playlist_name) continue;
+
+			// Verifying autoplaylist client name
+			if (!apm->is_client_present(idx)) continue;
+
+			plm->playlist_lock_query_name(idx, idx_playlist_client);
+			if (idx_playlist_client == HTTPC_QUERY_AUTOPLAYLIST_CLIENT_NAME)
 			{
-				apm->remove_client(idx);
-				if (!apm->is_client_present(idx))
-				{
-					playlist = idx; 
-					found = true;  
-					break;
-				}
+				playlist = idx;
+				found = true;
+				break;
 			}
 		}
-		if (found == false) playlist = plm->find_or_create_playlist_unlocked(playlist_name);
+
+		if (!found)
+			playlist = plm->find_or_create_playlist_unlocked(playlist_name);
 	}
 	else
+	{
 		playlist = plm->get_active_playlist();
 
+		// Trying to remove autoplaylist client
+		if (apm->is_client_present(playlist))
+		{
+			apm->remove_client(playlist);
+			if (apm->is_client_present(playlist))
+				// Client remains, creating new playlist instead
+				foo_error(
+					pfc::string_formatter() << "Cannot remove active playlist autoplaylist client, creating new playlist"
+				);
+				playlist = plm->find_or_create_playlist_unlocked(playlist_name);
+
+		}
+	}
+
 	plm->set_active_playlist(playlist);
+
+	if (apm->is_client_present(playlist))
+		apm->remove_client(playlist);
 
 	return playlist;
 }
