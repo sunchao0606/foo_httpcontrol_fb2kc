@@ -16,6 +16,8 @@
 // Number of albumart instances to support
 #define HTTPC_ART_COUNT 2
 
+// Titleformat separator sequence
+#define HTTPC_TF_SEP "|*|"
 
 namespace httpc {
 	extern pfc::readWriteLock cs;

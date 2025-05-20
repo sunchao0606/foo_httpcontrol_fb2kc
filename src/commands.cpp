@@ -1172,7 +1172,10 @@ namespace control
 		plm->queue_get_contents(queue);
 
 		service_ptr_t<titleformat_object> track_script;
-		static_api_ptr_t<titleformat_compiler>()->compile_safe(track_script, "$if2(%TITLE%,?)|*|$if2(%ARTIST%,?)|*|$if2(%ALBUM%,?)|*|$if2(%LENGTH%,0:00)|*|$max(%RATING%,0)");
+		static_api_ptr_t<titleformat_compiler>()->compile_safe(
+			track_script,
+			"$if2(%TITLE%,?)" HTTPC_TF_SEP "$if2(%ARTIST%,?)" HTTPC_TF_SEP "$if2(%ALBUM%,?)" HTTPC_TF_SEP "$if2(%LENGTH%,0:00)" HTTPC_TF_SEP "$max(%RATING%, 0)"
+		);
 		pfc::string8 track_info;
 		pfc::list_t<pfc::string8> track_info_list;
 
@@ -1181,14 +1184,14 @@ namespace control
 		for (auto k = 0; k < l; ++k)
 		{
 			queue[k].m_handle->format_title(NULL, track_info, track_script, NULL);
-			pfc::splitStringSimple_toList(track_info_list, "|*|", track_info);
+			pfc::splitStringSimple_toList(track_info_list, HTTPC_TF_SEP, track_info);
 			command_result << "{";
 			command_result << "\"pi\":\"" << queue[k].m_item << "\", ";
 			command_result << "\"pl\":\"" << queue[k].m_playlist << "\", ";
 			command_result << "\"qi\":\"" << k << "\", ";
-			command_result << "\"t\":\"" << track_info_list[0] << "\", ";
-			command_result << "\"a\":\"" << track_info_list[1] << "\", ";
-			command_result << "\"al\":\"" << track_info_list[2] << "\", ";
+			command_result << "\"t\":\"" << xml_friendly_string(track_info_list[0]) << "\", ";
+			command_result << "\"a\":\"" << xml_friendly_string(track_info_list[1]) << "\", ";
+			command_result << "\"al\":\"" << xml_friendly_string(track_info_list[2]) << "\", ";
 			command_result << "\"l\":\"" << track_info_list[3] << "\", ";
 			command_result << "\"r\":\"" << track_info_list[4] << "\" ";
 			command_result << "}";
